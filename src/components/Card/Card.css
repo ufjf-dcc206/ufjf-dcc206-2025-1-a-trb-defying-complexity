@@ -1,0 +1,33 @@
+.card {
+    width: 100px;
+    height: 150px;
+}
+
+img {
+    width: 100px;
+    height: 150px;
+    padding-right: 15px;
+    transition: transform 0.3s ease;
+}
+
+img:hover,
+.selected-card img {
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+.card:hover {
+    transform: scale(1.1);
+    transition: all 0.3s ease-in-out;
+}
+
+.selected-card > img {
+    border: 2px solid green;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
+.selected-card:hover {
+    transform: scale(1.01);
+        transition: all 0.3s ease-in-out;
+    cursor: pointer;
+}

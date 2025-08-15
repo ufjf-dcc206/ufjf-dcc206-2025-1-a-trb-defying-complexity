@@ -1,17 +1,33 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + TS</title>
-  </head>
-  <body>
-    <div class="main-content">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vite + TS</title>
+</head>
+<body>
+  <div class="main-content">
 
 
-      <app-sidebar></app-sidebar>
+    <app-sidebar></app-sidebar>
+
+    <div class="card-hand">
+      <game-card carta="8-copas"></game-card>
+      <game-card carta="8-copas"></game-card>
+      <game-card carta="8-espadas"></game-card>
+      <game-card carta="9-ouros"></game-card>
+      <game-card carta="rei-ouros"></game-card>
+      <game-card carta="8-paus"></game-card>
     </div>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
+
+    <button id="jogarBtn">a</button>
+    <!-- 
+    criar card-hand ou algo assim
+     -->
+  </div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+
 </html>
