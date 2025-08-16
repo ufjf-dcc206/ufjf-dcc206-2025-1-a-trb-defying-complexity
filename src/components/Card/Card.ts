@@ -43,8 +43,8 @@ export default class Card extends HTMLElement {
         }
 
         if (name === 'selecionada') {
-            this.#card.selecionada = newValue !== null;
-            // Atualiza só a classe do container, sem re-renderizar tudo
+            this.#card.selecionada = (newValue !== null);
+            
             const container = this.querySelector('.card-container');
             if (container) {
                 if (this.#card.selecionada) {

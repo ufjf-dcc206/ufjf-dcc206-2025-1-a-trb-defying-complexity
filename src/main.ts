@@ -1,6 +1,4 @@
 import './style.css'
-import Sidebar from './components/Sidebar/Sidebar.js';
-import Card from './components/Card/Card.js';
 
 import checkCombination from './lib/checkCombination.js';
 
