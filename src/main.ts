@@ -2,7 +2,6 @@ import './style.css'
 import Card from './components/Card/Card.js';
 import Sidebar from './components/Sidebar/Sidebar.js';
 
-
 import checkCombination from './lib/checkCombination.js';
 
 let cards = document.querySelectorAll('game-card');
@@ -31,6 +30,12 @@ const selectCard = (e: Event): void => {
         if (quantSelecionado == 5) return;
         cardElement.setAttribute('selecionada', '');
     }
+
+    const cartasComDados = getCartasSelecionadasComDados();
+
+    if (cartasComDados.length == 0) return;
+
+    console.log(checkCombination(cartasComDados))
 }
 
 const playTriggered = (): void => {

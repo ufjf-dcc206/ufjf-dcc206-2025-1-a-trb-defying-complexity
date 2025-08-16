@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/vite.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Vite + TS</title>
+  <title>ICELatro</title>
 </head>
 <body>
   <div class="main-content">
@@ -16,11 +16,22 @@
       
       <div class="table-area">
         <div class="card-hand">
-          <game-card carta="8-copas" ></game-card>
-          <game-card carta="9-copas"></game-card>
-          <game-card carta="10-copas"></game-card>
-          <game-card carta="valete-copas"></game-card>
-          <game-card carta="dama-copas"></game-card>
+            <!-- Todos os naipes: copas, ouros, espadas, paus -->
+            <!-- Todas as figuras: ás, 2, 3, 4, 5, 6, 7, 8, 9, 10, valete, dama, rei -->
+            <game-card carta="as-copas"></game-card>
+            <game-card carta="as-paus"></game-card>
+            
+            <game-card carta="rei-copas"></game-card>
+            <game-card carta="dama-copas"></game-card>
+            <game-card carta="valete-copas"></game-card>
+            
+            <game-card carta="3-ouros"></game-card>
+
+            
+            <game-card carta="6-espadas"></game-card>
+
+            <game-card carta="9-espadas"></game-card>
+            
         </div>
         <button id="jogarBtn">a</button>
       </div>

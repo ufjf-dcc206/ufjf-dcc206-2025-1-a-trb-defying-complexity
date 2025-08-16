@@ -6,6 +6,7 @@ interface CardData {
 }
 
 function contarValores(cartas: CardData[]): Record<string | number, CardData[]> {
+    // conta quantas cartas de cada tipo tem, tipo quantos reis, quandos 3...
     const contagem: Record<string | number, CardData[]> = {};
     for (const carta of cartas) {
         if (!contagem[carta.valor]) contagem[carta.valor] = [];
@@ -16,6 +17,7 @@ function contarValores(cartas: CardData[]): Record<string | number, CardData[]> 
 
 function contarNaipes(cartas: CardData[]): Record<string, CardData[]> {
     const contagem: Record<string, CardData[]> = {};
+    // conta quantas cartas de cada naipe tem...
     for (const carta of cartas) {
         if (!contagem[carta.naipe]) contagem[carta.naipe] = [];
         contagem[carta.naipe].push(carta);
@@ -25,7 +27,7 @@ function contarNaipes(cartas: CardData[]): Record<string, CardData[]> {
 
 function valorNumerico(valor: string): number {
     switch (valor) {
-        case 'as': return 14; // ou 1, dependendo da regra
+        case 'as': return 14;
         case 'rei': return 13;
         case 'dama': return 12;
         case 'valete': return 11;
@@ -48,7 +50,8 @@ function isSequencia(cartas: CardData[]): CardData[] | null {
 
 export default function checkCombination(selectedCards: CardData[]) {
     const quantCartasSelecionadas = selectedCards.length;
-    if (quantCartasSelecionadas < 1) return { combinacao: "Nenhuma", cartas: [] };
+    if (quantCartasSelecionadas < 1) return { combinacao: "nenhuma", cartas: [] };
+;
 
     // Ordena por valor numérico para facilitar sequências
     const cartas = [...selectedCards].sort((a, b) => valorNumerico(a.valor as string) - valorNumerico(b.valor as string));
@@ -60,7 +63,7 @@ export default function checkCombination(selectedCards: CardData[]) {
         if (Object.keys(contagemNaipes).length === 1) {
             const seq = isSequencia(cartas);
             if (seq) {
-                return { combinacao: "Straight Flush", cartas: seq };
+                return { combinacao: "straight_flush", cartas: seq };
             }
         }
     }
@@ -68,7 +71,7 @@ export default function checkCombination(selectedCards: CardData[]) {
     // QUADRA: 4 cartas do mesmo valor
     for (const valor in contagemValores) {
         if (contagemValores[valor].length === 4) {
-            return { combinacao: "Quadra", cartas: contagemValores[valor] };
+            return { combinacao: "quadra", cartas: contagemValores[valor] };
         }
     }
 
@@ -80,40 +83,40 @@ export default function checkCombination(selectedCards: CardData[]) {
         if (contagemValores[valor].length === 2) par = contagemValores[valor];
     }
     if (trinca.length && par.length && quantCartasSelecionadas === 5) {
-        return { combinacao: "Full House", cartas: [...trinca, ...par] };
+        return { combinacao: "full_house", cartas: [...trinca, ...par] };
     }
 
     // FLUSH: 5 cartas do mesmo naipe
     if (quantCartasSelecionadas === 5 && Object.keys(contagemNaipes).length === 1) {
-        return { combinacao: "Flush", cartas };
+        return { combinacao: "flush", cartas };
     }
 
-    // STRAIGHT: 5 cartas em sequência, independente do naipe
+    // SEQUÊNCIA: 5 cartas em sequência, independente do naipe
     if (quantCartasSelecionadas === 5) {
         const seq = isSequencia(cartas);
         if (seq) {
-            return { combinacao: "Straight", cartas: seq };
+            return { combinacao: "sequencia", cartas: seq };
         }
     }
 
     // TRINCA: 3 cartas do mesmo valor
     for (const valor in contagemValores) {
         if (contagemValores[valor].length === 3) {
-            return { combinacao: "Trinca", cartas: contagemValores[valor] };
+            return { combinacao: "trinca", cartas: contagemValores[valor] };
         }
     }
 
     // DOIS PARES: 2 pares diferentes
     const pares = Object.values(contagemValores).filter(arr => arr.length === 2);
     if (pares.length === 2) {
-        return { combinacao: "Dois Pares", cartas: [...pares[0], ...pares[1]] };
+        return { combinacao: "dois_pares", cartas: [...pares[0], ...pares[1]] };
     }
 
     // PAR: 2 cartas do mesmo valor
     if (pares.length === 1) {
-        return { combinacao: "Par", cartas: pares[0] };
+        return { combinacao: "par", cartas: pares[0] };
     }
 
-    // CARTA ALTA: nenhuma combinação acima
-    return { combinacao: "Carta Alta", cartas: [cartas[cartas.length - 1]] };
+    // CARTA ALTA: nenhuma combinação
+    return { combinacao: "carta_alta", cartas: [cartas[cartas.length - 1]] };
 }
