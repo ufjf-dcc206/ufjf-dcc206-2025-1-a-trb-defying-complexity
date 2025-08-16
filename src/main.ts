@@ -1,4 +1,7 @@
 import './style.css'
+import Card from './components/Card/Card.js';
+import Sidebar from './components/Sidebar/Sidebar.js';
+
 
 import checkCombination from './lib/checkCombination.js';
 
@@ -37,8 +40,7 @@ const playTriggered = (): void => {
         console.error('tem que ter pelo menos 1 selecionadar');
         return;
     }
-    console.log(cartasComDados)
-    checkCombination(cartasComDados);
+    console.log(checkCombination(cartasComDados))
 }
 
 cards.forEach((el) => {

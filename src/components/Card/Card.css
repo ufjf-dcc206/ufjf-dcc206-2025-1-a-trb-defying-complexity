@@ -1,33 +1,37 @@
 .card {
-    width: 100px;
-    height: 150px;
+    width: 10vw; 
+    height: 14vw;
+    max-width: 150px;
+    max-height: 210px;
+    min-width: 80px;
+    min-height: 112px;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    background: none;
 }
+/* Proporção melhorada e com visual mais bonito */
 
 img {
-    width: 100px;
-    height: 150px;
-    padding-right: 15px;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
     transition: transform 0.3s ease;
 }
 
-img:hover,
-.selected-card img {
-    transform: scale(1.1);
-    cursor: pointer;
-}
-
 .card:hover {
-    transform: scale(1.1);
-    transition: all 0.3s ease-in-out;
+    transform: translateY(-8px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
 }
 
-.selected-card > img {
-    border: 2px solid green;
-    box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+.selected-card {
+    background: none;
+    transform: translateY(-28px);
+    margin: 0px 10px;
+    box-shadow: 4px 22px 10px rgba(0, 0, 0, 0.7);
 }
 
 .selected-card:hover {
-    transform: scale(1.01);
-        transition: all 0.3s ease-in-out;
-    cursor: pointer;
+    transform: translateY(-6px) scale(1.02);
 }

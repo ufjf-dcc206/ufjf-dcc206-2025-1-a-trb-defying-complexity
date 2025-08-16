@@ -56,19 +56,7 @@ h1 {
 .main-content {
   display: flex;
   flex-direction: row;
-}
-
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vanilla:hover {
-  filter: drop-shadow(0 0 2em #3178c6aa);
+  
 }
 /* 
 .read-the-docs {
@@ -118,14 +106,73 @@ button{
 .card-hand{
   display: flex;
   flex-direction: row;
+  justify-content: center;
+  height: 100%;
+  width: 80%;
+  position: relative;
+  padding-bottom: 2rem;
+}
+
+/* .card-hand game-card:nth-child(1) {
+  transform: rotate(-4deg) ;
+  z-index: 1;
+}
+
+.card-hand game-card:nth-child(2) {
+  transform: rotate(-3deg);
+  z-index: 2;
+}
+
+.card-hand game-card:nth-child(3) {
+  transform: rotate(-2deg);
+  z-index: 3;
+}
+
+.card-hand game-card:nth-child(4) {
+  transform: rotate(2deg);
+  z-index: 4;
+}
+
+.card-hand game-card:nth-child(5) {
+  transform: rotate(3deg) ;
+  z-index: 5;
+}
+
+.card-hand game-card:nth-child(6) {
+  transform: rotate(4deg);
+  z-index: 6;
+} */
+
+.card-hand game-card:hover {
+  transform: translateY(-20px) rotate(0deg) scale(1.1) !important;
+  z-index: 10 !important;
+  transition: all 0.4s ease;
+  /* margin-left: 20px;
+  margin-right: 20px; */
 }
 
 .card {
-  padding: 2em;
+  height: 100%;
 }
 
 .cartas-area {
   display: flex;
   flex-direction: row;
   align-items: center;
+}
+
+.game-area{
+  background-color: #868cf0;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  justify-content: flex-end;
+  width: 78vw;
+}
+
+.table-area{
+  display: flex;
+  flex-direction: row;
+  height: 25vh;
+  align-items: flex-end;
 }

@@ -12,17 +12,19 @@
 
 
     <app-sidebar></app-sidebar>
-    
-    <hand-container class="card-hand">
-      <game-card carta="8-copas" ></game-card>
-      <game-card carta="8-copas"></game-card>
-      <game-card carta="8-espadas"></game-card>
-      <game-card carta="9-ouros"></game-card>
-      <game-card carta="rei-ouros"></game-card>
-      <game-card carta="8-paus"></game-card>
-    </hand-container>
-
-    <button id="jogarBtn">a</button>
+    <div class="game-area">
+      
+      <div class="table-area">
+        <div class="card-hand">
+          <game-card carta="8-copas" ></game-card>
+          <game-card carta="9-copas"></game-card>
+          <game-card carta="10-copas"></game-card>
+          <game-card carta="valete-copas"></game-card>
+          <game-card carta="dama-copas"></game-card>
+        </div>
+        <button id="jogarBtn">a</button>
+      </div>
+    </div>
     <!-- 
     criar card-hand ou algo assim
      -->
