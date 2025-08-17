@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
   <meta charset="UTF-8" />
@@ -7,38 +7,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ICELatro</title>
 </head>
+
 <body>
   <div class="main-content">
-
-
     <app-sidebar></app-sidebar>
     <div class="game-area">
-      
+      <played-hand></played-hand>
       <div class="table-area">
-        <div class="card-hand">
-            <!-- Todos os naipes: copas, ouros, espadas, paus -->
-            <!-- Todas as figuras: ás, 2, 3, 4, 5, 6, 7, 8, 9, 10, valete, dama, rei -->
-            <game-card carta="as-copas"></game-card>
-            <game-card carta="as-paus"></game-card>
-            
-            <game-card carta="rei-copas"></game-card>
-            <game-card carta="dama-copas"></game-card>
-            <game-card carta="valete-copas"></game-card>
-            
-            <game-card carta="3-ouros"></game-card>
-
-            
-            <game-card carta="6-espadas"></game-card>
-
-            <game-card carta="9-espadas"></game-card>
-            
-        </div>
-        <button id="jogarBtn">a</button>
+        <card-hand></card-hand>
+        <game-deck></game-deck>
       </div>
     </div>
-    <!-- 
-    criar card-hand ou algo assim
-     -->
+
   </div>
   <script type="module" src="/src/main.ts"></script>
 </body>

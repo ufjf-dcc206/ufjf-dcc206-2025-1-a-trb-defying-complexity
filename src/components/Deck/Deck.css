@@ -1,0 +1,32 @@
+.deck-img {
+    width: 8vw;
+    height: 12vw;
+    max-width: 130px;
+    max-height: 190px;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    border: none;
+}
+
+.deck-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transform: translateY(-28px);
+    box-shadow: 4px 22px 10px rgba(0, 0, 0, 0.7);
+}
+
+.deck-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    flex: 1;
+    height: 100%;
+    padding: 0px 30px;
+    margin-bottom: 30px;
+}
+
+.deck-container h4 {
+    margin: 5px;
+}

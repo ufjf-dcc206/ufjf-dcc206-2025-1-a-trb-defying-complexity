@@ -1,13 +1,14 @@
 import './Card.css';
 import { cardsObj } from '../../assets/cards/cards_object';
 
-interface CardType {
+export interface CardType {
     id: string;
+    selecionada: boolean;
     [key: string]: any;
 }
 
 export default class Card extends HTMLElement {
-    #card: CardType = { id: '' };
+    #card: CardType = { id: '', selecionada: false};
 
     static get observedAttributes() {
         return ['carta', 'selecionada'];
@@ -18,7 +19,7 @@ export default class Card extends HTMLElement {
     }
 
     set card(value: string) {
-        this.#card = cardsObj.find(card => card.id === value) || { id: '' };
+        this.#card = cardsObj.find(card => card.id === value) || { id: '', selecionada: false};
         this.#card.selecionada = this.hasAttribute('selecionada') || false;
         this.render();
     }

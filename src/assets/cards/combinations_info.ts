@@ -54,7 +54,7 @@ const combinations = {
         mult: 1
     },
     nenhuma: {
-        display_name: "Nenhum",
+        display_name: "",
         description: "Nenhuma carta selecionada",
         chips: 0,
         mult: 0
