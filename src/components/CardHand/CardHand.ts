@@ -7,6 +7,8 @@ import sendEvent from '../../lib/sendEvent.ts'
 export default class CardHand extends HTMLElement {
     #cartasAtuais: CardType[] = [];
     #baralhoAtual: CardType[] = [];
+    #btnsDisabled: boolean = false;
+    #isPaused: boolean = false;
 
     constructor() {
         super();
@@ -110,7 +112,7 @@ export default class CardHand extends HTMLElement {
                 cartasSelecionadas: cartasComDados,
                 cartasRestantes: cartasRestantes
             })
-            
+
             cartasSelecionadas.forEach(card => {
                 card.removeAttribute('selecionada');
             });
@@ -151,6 +153,36 @@ export default class CardHand extends HTMLElement {
             }
         });
 
+        document.addEventListener('toggle-btns-status', (e: any) => {
+            this.#btnsDisabled = e.detail.disabled;
+            this.render();
+        })
+
+        document.addEventListener('pontos-obtidos', (e: any) => {
+            this.#isPaused = true;
+            this.render();
+        });
+
+        document.addEventListener('game-over', (e: any) => {
+            this.#isPaused = true;
+            this.render();
+        });
+
+        document.addEventListener('proximo-nivel', () => {
+            const todasCartas = Object.values(cardsObj).map(carta => ({
+                ...carta,
+                selecionada: false
+            }));
+            const cartasEmbaralhadas = this.#embaralhar([...todasCartas]);
+
+            this.#cartasAtuais = cartasEmbaralhadas.slice(0, 8);
+            this.#baralhoAtual = cartasEmbaralhadas.slice(8);
+            this.#btnsDisabled = false;
+            this.#isPaused = false;
+
+            this.render();
+        })
+
         const getCardInfo = (cardElement: any) => {
             return {
                 element: cardElement,
@@ -174,12 +206,11 @@ export default class CardHand extends HTMLElement {
             // Encontrar a carta no array
             const carta = this.#cartasAtuais.find(c => c.id === cartaId);
             if (!carta) return;
-
             if (cardElement.hasAttribute('selecionada')) {
                 cardElement.removeAttribute('selecionada');
                 carta.selecionada = false;
             } else {
-                if (quantSelecionado == 5) return;
+                if (quantSelecionado == 5 || this.#isPaused) return;
                 cardElement.setAttribute('selecionada', '');
                 carta.selecionada = true;
             }
@@ -219,7 +250,7 @@ export default class CardHand extends HTMLElement {
                         <h4 style="margin: 10px 0;">${this.#cartasAtuais.length}/8</h4>
                     </div>
                     <div class="card-hand-controls">
-                        ${this.#cartasAtuais.some(carta => carta.selecionada) ? `<button id="play-btn">Jogar mão</button>` : ''}
+                        ${this.#cartasAtuais.some(carta => carta.selecionada) ? `<button id="play-btn" ${this.#btnsDisabled ? 'disabled' : ''}>Jogar mão</button>` : ''}
                         <div class="card-hand-controls-group">
                             <h4>Organizar mão</h4>
                             <div>
@@ -227,7 +258,7 @@ export default class CardHand extends HTMLElement {
                                 <button class="order-btn" id="orderByValue">Valor</button>
                             </div>
                         </div>
-                        ${this.#cartasAtuais.some(carta => carta.selecionada) ? `<button id="discard-btn">Descartar</button>` : ''}
+                        ${this.#cartasAtuais.some(carta => carta.selecionada) ? `<button id="discard-btn" ${this.#btnsDisabled ? 'disabled' : ''}>Descartar</button>` : ''}
                     </div>
                 </div>
                 <game-deck></game-deck>

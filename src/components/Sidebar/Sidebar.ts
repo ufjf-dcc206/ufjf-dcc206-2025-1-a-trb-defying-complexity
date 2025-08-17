@@ -1,5 +1,6 @@
 import "./Sidebar.css";
 import { combinations } from '../../assets/cards/combinations_info';
+import sendEvent from '../../lib/sendEvent.ts'
 
 interface RodadaAtualTipo {
   pontuacaoTotal: number;
@@ -37,6 +38,15 @@ export default class Sidebar extends HTMLElement {
     this.#adicionarEventListeners();
   }
 
+  get metaAtual(): number {
+    return this.#metaAtual;
+  }
+
+  set metaAtual(novaMeta: number) {
+    this.#metaAtual = novaMeta;
+    this.render();
+  }
+
   #adicionarEventListeners() {
     document.addEventListener('combinacao-alterada', (e: any) => {
       this.#combinacaoAtual = e.detail.combinacao;
@@ -69,32 +79,68 @@ export default class Sidebar extends HTMLElement {
 
     document.addEventListener('add-pontos', (e: any) => {
       const pontuacaoTotalElemento = this.querySelector('.current-score-value h3');
+      const combinacaoElemento = this.querySelector('.combinations-header h3');
 
-      for (let i = this.rodadaAtual.pontuacaoTotal; i <= (this.jogadaAtual.chips * this.jogadaAtual.mult); i++) {
-        setTimeout(() => {
-          pontuacaoTotalElemento!.textContent = i.toString();
-        }, 50 * (i - this.rodadaAtual.pontuacaoTotal));
+      const pontuacaoAtual = this.rodadaAtual.pontuacaoTotal;
+      const pontuacaoObtidaJogada = this.jogadaAtual.chips * this.jogadaAtual.mult
+      const novaPontuacao = pontuacaoAtual + (pontuacaoObtidaJogada);
+
+      combinacaoElemento!.textContent = (pontuacaoObtidaJogada).toString();
+      const incremento = Math.max(1, Math.floor((novaPontuacao - pontuacaoAtual) / 20)); // Incremento adaptativo
+
+      if (novaPontuacao > pontuacaoAtual) {
+        let contador = pontuacaoAtual;
+        const intervalo = setInterval(() => {
+          contador = Math.min(contador + incremento, novaPontuacao); // Garante que não ultrapasse
+          if (pontuacaoTotalElemento) {
+            pontuacaoTotalElemento.textContent = contador.toString();
+            combinacaoElemento!.textContent = (pontuacaoObtidaJogada - (contador - pontuacaoAtual)).toString();
+          }
+
+          if (contador >= novaPontuacao) {
+            clearInterval(intervalo);
+          }
+        }, 50);
       }
+      this.rodadaAtual.pontuacaoTotal = novaPontuacao;
 
-      this.rodadaAtual.pontuacaoTotal += (this.jogadaAtual.chips * this.jogadaAtual.mult);
-
-      // this.render();
+      const animationDuration = (50 * Math.min(20, Math.ceil((novaPontuacao - pontuacaoAtual) / incremento))); // calcula o tempo real da animacao
 
       setTimeout(() => {
+        // Resetar combinação apenas após a animação terminar
+        this.#combinacaoAtual!.cartas = [];
+        this.#combinacaoAtual!.combinacao = 'nenhuma';
+
         this.jogadaAtual = {
           chips: 0,
           mult: 0
         }
+
+        // Atualizar a UI com os valores finais
+        const pontuacaoTotalElemento = this.querySelector('.current-score-value h3');
+        if (pontuacaoTotalElemento) {
+          pontuacaoTotalElemento.textContent = this.rodadaAtual.pontuacaoTotal.toString();
+        }
+
         this.render();
-      }, 1000);
 
-      if (this.rodadaAtual.pontuacaoTotal >= this.#metaAtual) {
-        console.log('vc ganhou!!')
-      }
 
+        if (this.rodadaAtual.pontuacaoTotal >= this.#metaAtual) { // ganhou a rodada
+          console.log('vc ganhou!!');
+          sendEvent(this, 'pontos-obtidos', {
+            pontosFeitos: this.rodadaAtual.pontuacaoTotal,
+            metaUltrapassada: this.#metaAtual,
+            proximaMeta: this.metaAtual + 100
+          })
+        } else if (this.rodadaAtual.maosRestantes <= 0) {
+          console.log('vc perdeu!!');
+          sendEvent(this, 'game-over', {})
+        }
+
+      }, Math.max(animationDuration, 1500)); // usa o tempo de animacao ou o tempo minimo de 1500
     });
 
-    document.addEventListener('descarte-feito', (e: any) => {
+    document.addEventListener('descarte-feito', () => {
       const combinationName = this.querySelector('.combinations-header h3');
       this.#combinacaoAtual = { combinacao: 'nenhuma', cartas: [] };
 
@@ -111,7 +157,7 @@ export default class Sidebar extends HTMLElement {
       combinationName!.textContent = '';
     });
 
-    document.addEventListener('descarte-negado', (e: any) => {
+    document.addEventListener('descarte-negado', () => {
       const discardDisplay = this.querySelector('.discards-info h2');
 
       discardDisplay!.textContent = (this.rodadaAtual.descartesRestantes).toString();
@@ -123,7 +169,7 @@ export default class Sidebar extends HTMLElement {
 
     });
 
-    document.addEventListener('jogada-feita', (e: any) => {
+    document.addEventListener('jogada-feita', () => {
       this.rodadaAtual.maosRestantes--;
       const handsDisplay = this.querySelector('.hands-info h2');
 
@@ -133,6 +179,16 @@ export default class Sidebar extends HTMLElement {
       setTimeout(() => {
         handsDisplay!.classList.remove('info-highlight');
       }, 300);
+    })
+
+    document.addEventListener('proximo-nivel', () => {
+      this.#metaAtual += 100;
+      this.rodadaAtual = {
+        pontuacaoTotal: 0,
+        maosRestantes: 4,
+        descartesRestantes: 3
+      };
+      this.render();
     })
   }
 

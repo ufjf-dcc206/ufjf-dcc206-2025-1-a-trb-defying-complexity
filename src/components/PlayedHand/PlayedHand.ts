@@ -11,9 +11,8 @@ export default class PlayedHand extends HTMLElement {
         document.addEventListener('jogada-feita', (e: any) => {
             this.#cartasJogadasAtual = e.detail.cartasSelecionadas;
             this.#cartasCombinadasAtual = e.detail.cartasCombinadas;
+            sendEvent(this, 'toggle-btns-status', { disabled: true })
             this.#renderAnimado();
-
-
         });
     }
 
@@ -56,6 +55,12 @@ export default class PlayedHand extends HTMLElement {
                 if (index === this.#cartasJogadasAtual.length - 1) {
                     setTimeout(() => {
                         sendEvent(this, "add-pontos", {});
+                        this.#cartasJogadasAtual = [];
+                        this.#cartasCombinadasAtual = [];
+                        setTimeout(() => {
+                            sendEvent(this, 'toggle-btns-status', { disabled: false });
+                            // this.#verificarVitoria();
+                        }, 1500);
                     }, 1000);
                 }
             }, index * 500);
@@ -67,7 +72,7 @@ export default class PlayedHand extends HTMLElement {
             allPlayedCards.forEach(card => {
                 (card as HTMLElement).classList.add('animate-out');
             });
-            
+
             setTimeout(() => {
                 if (container) container.innerHTML = '';
             }, 500);

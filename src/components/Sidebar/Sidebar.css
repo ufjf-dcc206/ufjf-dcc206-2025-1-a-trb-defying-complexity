@@ -68,6 +68,7 @@ h2 {
     width: 95px;
     height: 95px;
     margin-right: 10px;
+    animation: wiggle 2.6s ease-in-out infinite;
 }
 
 .current-score {
@@ -163,8 +164,8 @@ h2 {
 .combinations-header {
     background-color: rgba(35, 35, 53, 0.841);
     width: 95%;
+    min-height: 45px;
     border-radius: 13px;
-    padding: 10px 0px;
     display: flex;
     margin: 0px;
     justify-content: center;
