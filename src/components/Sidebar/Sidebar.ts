@@ -122,7 +122,14 @@ export default class Sidebar extends HTMLElement {
           pontuacaoTotalElemento.textContent = this.rodadaAtual.pontuacaoTotal.toString();
         }
 
-        this.render();
+        // Atualize apenas os elementos necessários em vez de renderizar tudo novamente
+        const combinationName = this.querySelector('.combinations-header h3');
+        const chipsValue = this.querySelector('.chips-value h3');
+        const multiplierValue = this.querySelector('.multiplier-value h3');
+        
+        if (combinationName) combinationName.textContent = '';
+        if (chipsValue) chipsValue.textContent = '0';
+        if (multiplierValue) multiplierValue.textContent = '0';
 
 
         if (this.rodadaAtual.pontuacaoTotal >= this.#metaAtual) { // ganhou a rodada

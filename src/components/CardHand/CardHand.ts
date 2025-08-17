@@ -82,9 +82,42 @@ export default class CardHand extends HTMLElement {
 
     connectedCallback() {
         this.render();
+        this.#adicionarEventListenersGlobais();
     }
 
-    #adicionarEventListeners() {
+    #adicionarEventListenersGlobais() {
+        document.addEventListener('toggle-btns-status', (e: any) => {
+            this.#btnsDisabled = e.detail.disabled;
+            this.render();
+        })
+
+        document.addEventListener('pontos-obtidos', (e: any) => {
+            this.#isPaused = true;
+            this.render();
+        });
+
+        document.addEventListener('game-over', (e: any) => {
+            this.#isPaused = true;
+            this.render();
+        });
+
+        document.addEventListener('proximo-nivel', () => {
+            const todasCartas = Object.values(cardsObj).map(carta => ({
+                ...carta,
+                selecionada: false
+            }));
+            const cartasEmbaralhadas = this.#embaralhar([...todasCartas]);
+
+            this.#cartasAtuais = cartasEmbaralhadas.slice(0, 8);
+            this.#baralhoAtual = cartasEmbaralhadas.slice(8);
+            this.#btnsDisabled = false;
+            this.#isPaused = false;
+
+            this.render();
+        })
+    }
+
+    #adicionarEventListenersElementos() {
         const organizarNaipeBtn = this.querySelector("#orderBySuit");
         const organizarValorBtn = this.querySelector("#orderByValue");
         const jogarBtn = this.querySelector("#play-btn");
@@ -153,36 +186,6 @@ export default class CardHand extends HTMLElement {
             }
         });
 
-        document.addEventListener('toggle-btns-status', (e: any) => {
-            this.#btnsDisabled = e.detail.disabled;
-            this.render();
-        })
-
-        document.addEventListener('pontos-obtidos', (e: any) => {
-            this.#isPaused = true;
-            this.render();
-        });
-
-        document.addEventListener('game-over', (e: any) => {
-            this.#isPaused = true;
-            this.render();
-        });
-
-        document.addEventListener('proximo-nivel', () => {
-            const todasCartas = Object.values(cardsObj).map(carta => ({
-                ...carta,
-                selecionada: false
-            }));
-            const cartasEmbaralhadas = this.#embaralhar([...todasCartas]);
-
-            this.#cartasAtuais = cartasEmbaralhadas.slice(0, 8);
-            this.#baralhoAtual = cartasEmbaralhadas.slice(8);
-            this.#btnsDisabled = false;
-            this.#isPaused = false;
-
-            this.render();
-        })
-
         const getCardInfo = (cardElement: any) => {
             return {
                 element: cardElement,
@@ -236,37 +239,33 @@ export default class CardHand extends HTMLElement {
     }
 
     render() {
-        this.innerHTML = (`
+        console.log('cardhand render')
 
-            <div style="display: flex; width: 100%; gap:20px">
-                <div>
-                    <div class="card-hand">
-                        ${this.#cartasAtuais.map((el) => {
-            return `<game-card carta="${el.id}" ${el.selecionada ? "selecionada" : ""}></game-card>`
-        }).join('')}
-                    </div>
-                    
-                     <div style="text-align: center;">
-                        <h4 style="margin: 10px 0;">${this.#cartasAtuais.length}/8</h4>
-                    </div>
-                    <div class="card-hand-controls">
-                        ${this.#cartasAtuais.some(carta => carta.selecionada) ? `<button id="play-btn" ${this.#btnsDisabled ? 'disabled' : ''}>Jogar mão</button>` : ''}
-                        <div class="card-hand-controls-group">
-                            <h4>Organizar mão</h4>
-                            <div>
-                                <button class="order-btn" id="orderBySuit">Naipe</button>
-                                <button class="order-btn" id="orderByValue">Valor</button>
-                            </div>
-                        </div>
-                        ${this.#cartasAtuais.some(carta => carta.selecionada) ? `<button id="discard-btn" ${this.#btnsDisabled ? 'disabled' : ''}>Descartar</button>` : ''}
+        this.innerHTML = (`
+            <div class="card-hand">
+                ${this.#cartasAtuais.map((el) => {
+                    return `<game-card carta="${el.id}" ${el.selecionada ? "selecionada" : ""}></game-card>`
+                }).join('')}
+            </div>
+            
+            <div style="text-align: center;">
+                <h4 style="margin: 10px 0;">${this.#cartasAtuais.length}/8</h4>
+            </div>
+            <div class="card-hand-controls">
+                ${this.#cartasAtuais.some(carta => carta.selecionada) ? `<button id="play-btn" ${this.#btnsDisabled ? 'disabled' : ''}>Jogar mão</button>` : ''}
+                <div class="card-hand-controls-group">
+                    <h4>Organizar mão</h4>
+                    <div>
+                        <button class="order-btn" id="orderBySuit">Naipe</button>
+                        <button class="order-btn" id="orderByValue">Valor</button>
                     </div>
                 </div>
-                <game-deck></game-deck>
+                ${this.#cartasAtuais.some(carta => carta.selecionada) ? `<button id="discard-btn" ${this.#btnsDisabled ? 'disabled' : ''}>Descartar</button>` : ''}
             </div>
 
       `);
 
-        this.#adicionarEventListeners();
+        this.#adicionarEventListenersElementos();
     }
 }
 

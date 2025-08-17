@@ -9,15 +9,16 @@ export default class Result extends HTMLElement {
     #botaoAtualText: string = '';
 
 
-    #adicionarEventListeners() {
-        const continuarBtn = document.querySelector("#continuarBtn");
+    connectedCallback() {
+        this.render();
+        this.#adicionarEventListenersGlobais();
+    }
 
+    #adicionarEventListenersGlobais() {
         document.addEventListener('pontos-obtidos', (e: any) => {
             const metaUltrapassada = e.detail.metaUltrapassada;
             const pontosFeitos = e.detail.pontosFeitos;
             const proximaMeta = e.detail.proximaMeta;
-            console.log(metaUltrapassada)
-            console.log(pontosFeitos)
             this.#resultTitle = 'Ganhou!';
             this.#resultMessage = `Você conseguiu passar de nível! \n Você fez ${pontosFeitos} de ${metaUltrapassada} pontos!! Próxima meta éh de ${proximaMeta} hein`;
             this.#botaoAtual = 'continuarBtn';
@@ -32,6 +33,11 @@ export default class Result extends HTMLElement {
             this.#botaoAtualText = 'Recomeçar';
             this.render();
         });
+    }
+
+    #adicionarEventListenersBotoes() {
+        const continuarBtn = this.querySelector("#continuarBtn");
+        const restartBtn = this.querySelector("#restartBtn");
 
         continuarBtn?.addEventListener('click', () => {
             this.#resultTitle = '';
@@ -42,15 +48,12 @@ export default class Result extends HTMLElement {
             sendEvent(document, 'proximo-nivel', {
                 proximaMeta: 200
             })
-                    this.render();
-        })
+            this.render();
+        });
 
-    }
-
-
-
-    connectedCallback() {
-        this.render();
+        restartBtn?.addEventListener('click', () => {
+            location.reload();
+        });
     }
 
     render() {
@@ -61,7 +64,8 @@ export default class Result extends HTMLElement {
                  ${this.#botaoAtual ? `<button id="${this.#botaoAtual}">${this.#botaoAtualText}</button>` : ''}
             </div>
         `;
-        this.#adicionarEventListeners();
+        
+        this.#adicionarEventListenersBotoes();
     }
 }
 customElements.define('game-result', Result);

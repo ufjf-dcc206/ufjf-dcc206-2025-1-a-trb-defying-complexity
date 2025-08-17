@@ -8,7 +8,7 @@ export interface CardType {
 }
 
 export default class Card extends HTMLElement {
-    #card: CardType = { id: '', selecionada: false};
+    #card: CardType = { id: '', selecionada: false };
 
     static get observedAttributes() {
         return ['carta', 'selecionada'];
@@ -19,9 +19,9 @@ export default class Card extends HTMLElement {
     }
 
     set card(value: string) {
-        this.#card = cardsObj.find(card => card.id === value) || { id: '', selecionada: false};
+        this.#card = cardsObj.find(card => card.id === value) || { id: '', selecionada: false };
         this.#card.selecionada = this.hasAttribute('selecionada') || false;
-        this.render();
+        // this.render();
     }
 
 
@@ -45,7 +45,7 @@ export default class Card extends HTMLElement {
 
         if (name === 'selecionada') {
             this.#card.selecionada = (newValue !== null);
-            
+
             const container = this.querySelector('.card-container');
             if (container) {
                 if (this.#card.selecionada) {

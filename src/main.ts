@@ -30,7 +30,6 @@ const playTriggered = (): void => {
         console.error('tem que ter pelo menos 1 selecionadar');
         return;
     }
-    console.log(checkCombination(cartasComDados))
 }
 
 

@@ -5,23 +5,27 @@ export default class Deck extends HTMLElement {
     #cartasRestantes: number = 44;
 
     constructor() {
-            super();
-        }
+        super();
+    }
 
     connectedCallback() {
         document.addEventListener('jogada-feita', (e: Event) => {
             const detail = (e as CustomEvent).detail;
-            // console.log('jogada feita evento');
-            // console.log(detail.cartasRestantes);
             this.#cartasRestantes = detail.cartasRestantes;
-            this.render();
+            this.#atualizarContador();
         });
-        
+
         this.render();
     }
 
+    #atualizarContador() {
+        const contador = this.querySelector('h4');
+        if (contador) {
+            contador.textContent = `${this.#cartasRestantes}/52`;
+        }
+    }
+
     render() {
-        //  console.log('Renderizando deck com:', this.#cartasRestantes, 'cartas');
         this.innerHTML = (`
         <div class="deck-container">
             <img class="deck-img" src="/src/assets/images/cards/0-costas.png">
