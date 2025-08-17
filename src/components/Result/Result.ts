@@ -19,18 +19,18 @@ export default class Result extends HTMLElement {
             const metaUltrapassada = e.detail.metaUltrapassada;
             const pontosFeitos = e.detail.pontosFeitos;
             const proximaMeta = e.detail.proximaMeta;
-            this.#resultTitle = 'Ganhou!';
-            this.#resultMessage = `Você conseguiu passar de nível! \n Você fez ${pontosFeitos} de ${metaUltrapassada} pontos!! Próxima meta éh de ${proximaMeta} hein`;
+            this.#resultTitle = 'Muito bem!';
+            this.#resultMessage = `Nivel concluido! Voce fez ${pontosFeitos} de ${metaUltrapassada} pontos necessarios.\nNova meta: ${proximaMeta} pontos. Pronto para continuar?`;
             this.#botaoAtual = 'continuarBtn';
-            this.#botaoAtualText = 'Próximo nível';
+            this.#botaoAtualText = 'Proximo nivel';
             this.render();
         });
 
         document.addEventListener('game-over', (e: any) => {
-            this.#resultTitle = 'Perdeu!';
-            this.#resultMessage = 'Que pena! você não conseguiu passar de nível!';
+            this.#resultTitle = 'Game Over';
+            this.#resultMessage = 'Fim de jogo! Sua pontuacao foi insuficiente para passar de nivel. Tente outra vez!';
             this.#botaoAtual = 'restartBtn';
-            this.#botaoAtualText = 'Recomeçar';
+            this.#botaoAtualText = 'Tentar novamente';
             this.render();
         });
     }

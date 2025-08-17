@@ -15,6 +15,10 @@ export default class Deck extends HTMLElement {
             this.#atualizarContador();
         });
 
+        document.addEventListener('proximo-nivel', () => {
+            this.#cartasRestantes = 44;
+            this.render();
+        })
         this.render();
     }
 
@@ -24,6 +28,9 @@ export default class Deck extends HTMLElement {
             contador.textContent = `${this.#cartasRestantes}/52`;
         }
     }
+
+
+
 
     render() {
         this.innerHTML = (`

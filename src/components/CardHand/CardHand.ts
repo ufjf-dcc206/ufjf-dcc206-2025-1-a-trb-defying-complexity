@@ -136,7 +136,7 @@ export default class CardHand extends HTMLElement {
         jogarBtn?.addEventListener('click', () => {
             const cartasComDados = getCartasSelecionadasComDados();
             const cartasSelecionadas = this.querySelectorAll('game-card[selecionada]');
-            const cartasRestantes = this.#baralhoAtual.length;
+            const cartasRestantes = this.#baralhoAtual.length - cartasSelecionadas.length;
             const combinacao = checkCombination(cartasComDados);
 
             sendEvent(this, "jogada-feita", {
@@ -239,8 +239,6 @@ export default class CardHand extends HTMLElement {
     }
 
     render() {
-        console.log('cardhand render')
-
         this.innerHTML = (`
             <div class="card-hand">
                 ${this.#cartasAtuais.map((el) => {
