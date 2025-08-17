@@ -26,7 +26,7 @@ export default class Result extends HTMLElement {
             this.render();
         });
 
-        document.addEventListener('game-over', (e: any) => {
+        document.addEventListener('game-over', () => {
             this.#resultTitle = 'Game Over';
             this.#resultMessage = 'Fim de jogo! Sua pontuacao foi insuficiente para passar de nivel. Tente outra vez!';
             this.#botaoAtual = 'restartBtn';
