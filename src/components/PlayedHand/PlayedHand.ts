@@ -17,50 +17,61 @@ export default class PlayedHand extends HTMLElement {
         });
     }
 
-    #renderAnimado() {  
+    #renderAnimado() {
         this.innerHTML = '<div class="played-hand-container"></div>';
         const container = this.querySelector('.played-hand-container');
 
         this.#cartasJogadasAtual.forEach((el, index) => {
             setTimeout(() => {
-            const isCardCombined = this.#cartasCombinadasAtual.some(combinedCard => combinedCard.id === el.id);
+                const isCardCombined = this.#cartasCombinadasAtual.some(combinedCard => combinedCard.id === el.id);
 
-            const cardHtml = `
+                const cardHtml = `
                 <div class="played-card">
                 <game-card carta="${el.id}"></game-card>
                 ${isCardCombined ? `<div class="card-bonus">+${el.valorJogo || 0} fichas</div>` : ''}
                 </div>
             `;
 
-            container!.innerHTML += cardHtml;
+                container!.innerHTML += cardHtml;
 
-            const novaCard = container!.lastElementChild as HTMLElement;
-            setTimeout(() => {
-                novaCard.classList.add('animate-in');
-
-                // Se tem bonus, mostra depois de um tempinho
-                if (isCardCombined) {
+                const novaCard = container!.lastElementChild as HTMLElement;
                 setTimeout(() => {
-                    const bonus = novaCard.querySelector('.card-bonus');
-                    if (bonus) {
-                    bonus.classList.add('show');
-                    sendEvent(this, "add-chips", {
-                        quantidade: el.valorJogo
-                    })
+                    novaCard.classList.add('animate-in');
+
+                    // Se tem bonus, mostra depois de um tempinho
+                    if (isCardCombined) {
+                        setTimeout(() => {
+                            const bonus = novaCard.querySelector('.card-bonus');
+                            if (bonus) {
+                                bonus.classList.add('show');
+                                sendEvent(this, "add-chips", {
+                                    quantidade: el.valorJogo
+                                })
+                            }
+                        }, 200);
                     }
-                }, 200);
+                }, 50);
+
+                // se for a última, enviar depois de terminar as animações
+                if (index === this.#cartasJogadasAtual.length - 1) {
+                    setTimeout(() => {
+                        sendEvent(this, "add-pontos", {});
+                    }, 1000);
                 }
-            }, 50);
-            
-            // se for a última, enviar depois de terminar as animações
-            if (index === this.#cartasJogadasAtual.length - 1) {
-                setTimeout(() => {
-                sendEvent(this, "add-pontos", {});
-                }, 1000); 
-            }
             }, index * 500);
         });
 
+        // limpar dps de 2 segundos
+        setTimeout(() => {
+            const allPlayedCards = container?.querySelectorAll('.played-card') || [];
+            allPlayedCards.forEach(card => {
+                (card as HTMLElement).classList.add('animate-out');
+            });
+            
+            setTimeout(() => {
+                if (container) container.innerHTML = '';
+            }, 500);
+        }, 2000);
     }
 
     connectedCallback() {

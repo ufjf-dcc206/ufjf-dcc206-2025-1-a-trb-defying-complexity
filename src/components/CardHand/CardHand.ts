@@ -2,6 +2,7 @@ import "./CardHand.css";
 import { cardsObj } from '../../assets/cards/cards_object';
 import checkCombination from '../../lib/checkCombination.ts'
 import type { CardType } from '../Card/Card.ts';
+import sendEvent from '../../lib/sendEvent.ts'
 
 export default class CardHand extends HTMLElement {
     #cartasAtuais: CardType[] = [];
@@ -35,6 +36,10 @@ export default class CardHand extends HTMLElement {
 
         const cartasSelecionadas = this.#baralhoAtual.slice(0, quantidade);
         this.#baralhoAtual = this.#baralhoAtual.slice(quantidade);
+
+        const idsCartasSelecionadas = cartasSelecionadas.map(carta => carta.id);
+        this.#baralhoAtual = this.#baralhoAtual.filter(carta => !idsCartasSelecionadas.includes(carta.id));
+
         return cartasSelecionadas;
     }
 
@@ -96,19 +101,16 @@ export default class CardHand extends HTMLElement {
         jogarBtn?.addEventListener('click', () => {
             const cartasComDados = getCartasSelecionadasComDados();
             const cartasSelecionadas = this.querySelectorAll('game-card[selecionada]');
-
+            const cartasRestantes = this.#baralhoAtual.length;
             const combinacao = checkCombination(cartasComDados);
 
-            const evento = new CustomEvent('jogada-feita', {
-                detail: {
-                    combinacao: combinacao.combinacao,
-                    cartasCombinadas: combinacao.cartas,
-                    cartasSelecionadas: cartasComDados
-                },
-                bubbles: true
-            });
-            this.dispatchEvent(evento);
-
+            sendEvent(this, "jogada-feita", {
+                combinacao: combinacao.combinacao,
+                cartasCombinadas: combinacao.cartas,
+                cartasSelecionadas: cartasComDados,
+                cartasRestantes: cartasRestantes
+            })
+            
             cartasSelecionadas.forEach(card => {
                 card.removeAttribute('selecionada');
             });
@@ -121,9 +123,33 @@ export default class CardHand extends HTMLElement {
 
             const novasCartas = this.#obterCartasAleatorias(cartasSelecionadas.length);
             this.#cartasAtuais = this.#cartasAtuais.filter(carta => !carta.selecionada).concat(novasCartas);
-            
+
             this.render();
         })
+
+        descartarBtn?.addEventListener('click', () => {
+
+            const cartasSelecionadas = this.querySelectorAll('game-card[selecionada]');
+            // busca o Sidebar para verificar descartesRestantes
+            const sidebar = document.querySelector('app-sidebar');
+            let descartesRestantes = 0;
+            if (sidebar && 'rodadaAtual' in sidebar) {
+                descartesRestantes = (sidebar as any).rodadaAtual.descartesRestantes;
+            }
+            if (cartasSelecionadas.length > 0 && descartesRestantes > 0) {
+                sendEvent(document, "descarte-feito", {});
+                const idsSelecionadas = Array.from(cartasSelecionadas).map(card => card.getAttribute('carta'));
+                this.#cartasAtuais = this.#cartasAtuais.filter(carta => !idsSelecionadas.includes(carta.id));
+                const novasCartas = this.#obterCartasAleatorias(cartasSelecionadas.length);
+                this.#cartasAtuais = this.#cartasAtuais.concat(novasCartas);
+                this.render();
+            } else if (descartesRestantes === 0) {
+                sendEvent(document, "descarte-negado", {});
+
+            } else {
+                // alert('Selecione cartas para descartar!');
+            }
+        });
 
         const getCardInfo = (cardElement: any) => {
             return {
@@ -180,29 +206,31 @@ export default class CardHand extends HTMLElement {
 
     render() {
         this.innerHTML = (`
-            
-            <div>
-                <div class="card-hand">
-                    ${this.#cartasAtuais.map((el) => {
+
+            <div style="display: flex; width: 100%; gap:20px">
+                <div>
+                    <div class="card-hand">
+                        ${this.#cartasAtuais.map((el) => {
             return `<game-card carta="${el.id}" ${el.selecionada ? "selecionada" : ""}></game-card>`
         }).join('')}
-                </div>
-                
-                 <div style="text-align: center;">
-                    <h4 style="margin: 10px 0;">${this.#cartasAtuais.length}/8</h4>
-                </div>
-
-                <div class="card-hand-controls">
-                    ${this.#cartasAtuais.some(carta => carta.selecionada) ? `<button id="play-btn">Jogar mão</button>` : ''}
-                    <div class="card-hand-controls-group">
-                        <h4>Organizar mão</h4>
-                        <div>
-                            <button class="order-btn" id="orderBySuit">Naipe</button>
-                            <button class="order-btn" id="orderByValue">Valor</button>
-                        </div>
                     </div>
-                    ${this.#cartasAtuais.some(carta => carta.selecionada) ? `<button id="discard-btn">Descartar</button>` : ''}
+                    
+                     <div style="text-align: center;">
+                        <h4 style="margin: 10px 0;">${this.#cartasAtuais.length}/8</h4>
+                    </div>
+                    <div class="card-hand-controls">
+                        ${this.#cartasAtuais.some(carta => carta.selecionada) ? `<button id="play-btn">Jogar mão</button>` : ''}
+                        <div class="card-hand-controls-group">
+                            <h4>Organizar mão</h4>
+                            <div>
+                                <button class="order-btn" id="orderBySuit">Naipe</button>
+                                <button class="order-btn" id="orderByValue">Valor</button>
+                            </div>
+                        </div>
+                        ${this.#cartasAtuais.some(carta => carta.selecionada) ? `<button id="discard-btn">Descartar</button>` : ''}
+                    </div>
                 </div>
+                <game-deck></game-deck>
             </div>
 
       `);
@@ -210,4 +238,5 @@ export default class CardHand extends HTMLElement {
         this.#adicionarEventListeners();
     }
 }
+
 customElements.define('card-hand', CardHand);

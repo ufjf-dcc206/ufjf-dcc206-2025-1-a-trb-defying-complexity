@@ -18,13 +18,12 @@
 
 .deck-container {
     display: flex;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
     flex-direction: column;
-    flex: 1;
     height: 100%;
-    padding: 0px 30px;
-    margin-bottom: 30px;
+    width: 100%;
+    margin-left: 22px;
 }
 
 .deck-container h4 {
