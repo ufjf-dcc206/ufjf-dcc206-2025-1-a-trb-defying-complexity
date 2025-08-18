@@ -91,12 +91,12 @@ export default class CardHand extends HTMLElement {
             this.render();
         })
 
-        document.addEventListener('pontos-obtidos', () => {
+        document.addEventListener('pontos-obtidos', (e: any) => {
             this.#isPaused = true;
             this.render();
         });
 
-        document.addEventListener('game-over', () => {
+        document.addEventListener('game-over', (e: any) => {
             this.#isPaused = true;
             this.render();
         });

@@ -77,7 +77,7 @@ export default class Sidebar extends HTMLElement {
       }
     });
 
-    document.addEventListener('add-pontos', () => {
+    document.addEventListener('add-pontos', (e: any) => {
       const pontuacaoTotalElemento = this.querySelector('.current-score-value h3');
       const combinacaoElemento = this.querySelector('.combinations-header h3');
 

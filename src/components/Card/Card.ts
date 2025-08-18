@@ -38,7 +38,7 @@ export default class Card extends HTMLElement {
     }
 
 
-    attributeChangedCallback(name: string, newValue: string) {
+    attributeChangedCallback(name: string, oldValue: string, newValue: string) {
         if (name === 'carta') {
             this.card = newValue;
         }
