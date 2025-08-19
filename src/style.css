@@ -133,8 +133,15 @@ button {
 }
 
 .table-area {
+  width: 100%;
+  justify-content: center;
   display: flex;
   flex-direction: row;
   height: 40vh;
   align-items: flex-end;
+  gap: 20px;
+}
+
+game-deck{
+  height: 38vh;
 }

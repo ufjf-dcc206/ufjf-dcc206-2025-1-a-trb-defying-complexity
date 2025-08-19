@@ -33,7 +33,7 @@ export const cardsObj: Array<{
     selecionada: boolean;
 }> = [];
 
-// Adiciona os coringas
+// adiciona os coringas
 // cardsObj.push({
 //     naipe: 'coringa',
 //     valor: 'coringa-vermelho',

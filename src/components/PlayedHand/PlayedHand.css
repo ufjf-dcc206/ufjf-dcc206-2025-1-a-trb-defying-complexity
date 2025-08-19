@@ -3,10 +3,12 @@
     flex-direction: row;
     height: 30vh;
     min-height: 130px;
-    width: 100%;
+    min-width: 700px;
+    width: 68vw;
     gap: 10px;
-    padding-left: 3vw;
     align-items: center;
+    justify-content: center;
+    /* background-color: rgba(24, 28, 38, 0.588); */
 }
 
 .played-hand-container game-card {

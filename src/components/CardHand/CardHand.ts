@@ -181,8 +181,6 @@ export default class CardHand extends HTMLElement {
             } else if (descartesRestantes === 0) {
                 sendEvent(document, "descarte-negado", {});
 
-            } else {
-                // alert('Selecione cartas para descartar!');
             }
         });
 
@@ -195,7 +193,6 @@ export default class CardHand extends HTMLElement {
         };
 
         const getCartasSelecionadasComDados = () => {
-            // Buscar apenas dentro deste componente
             const cartasSelecionadas = this.querySelectorAll('game-card[selecionada]');
             return Array.from(cartasSelecionadas).map(carta => getCardInfo(carta));
         };
@@ -203,10 +200,9 @@ export default class CardHand extends HTMLElement {
         const selectCard = (e: Event): void => {
             const cardElement = e.currentTarget as HTMLElement;
             const cartaId = cardElement.getAttribute('carta');
-            // Contar selecionadas apenas dentro deste componente
             const quantSelecionado = this.querySelectorAll('game-card[selecionada]').length;
 
-            // Encontrar a carta no array
+
             const carta = this.#cartasAtuais.find(c => c.id === cartaId);
             if (!carta) return;
             if (cardElement.hasAttribute('selecionada')) {

@@ -15,6 +15,7 @@ interface JogadaAtualTipo {
 
 export default class Sidebar extends HTMLElement {
   #metaAtual: number = 100;
+  #maiorPontuacao: number = 0;
 
   rodadaAtual: RodadaAtualTipo = {
     pontuacaoTotal: 0,
@@ -31,6 +32,10 @@ export default class Sidebar extends HTMLElement {
 
   constructor() {
     super();
+    const maiorPontuacaoSalva = localStorage.getItem('maiorPontuacao');
+    if (maiorPontuacaoSalva) {
+      this.#maiorPontuacao = parseInt(maiorPontuacaoSalva, 10);
+    }
   }
 
   connectedCallback() {
@@ -80,6 +85,7 @@ export default class Sidebar extends HTMLElement {
     document.addEventListener('add-pontos', (e: any) => {
       const pontuacaoTotalElemento = this.querySelector('.current-score-value h3');
       const combinacaoElemento = this.querySelector('.combinations-header h3');
+      const maiorPontuacaoElemento = this.querySelector('#maiorPontuacao');
 
       const pontuacaoAtual = this.rodadaAtual.pontuacaoTotal;
       const pontuacaoObtidaJogada = this.jogadaAtual.chips * this.jogadaAtual.mult
@@ -107,7 +113,6 @@ export default class Sidebar extends HTMLElement {
       const animationDuration = (50 * Math.min(20, Math.ceil((novaPontuacao - pontuacaoAtual) / incremento))); // calcula o tempo real da animacao
 
       setTimeout(() => {
-        // Resetar combinação apenas após a animação terminar
         this.#combinacaoAtual!.cartas = [];
         this.#combinacaoAtual!.combinacao = 'nenhuma';
 
@@ -116,13 +121,11 @@ export default class Sidebar extends HTMLElement {
           mult: 0
         }
 
-        // Atualizar a UI com os valores finais
         const pontuacaoTotalElemento = this.querySelector('.current-score-value h3');
         if (pontuacaoTotalElemento) {
           pontuacaoTotalElemento.textContent = this.rodadaAtual.pontuacaoTotal.toString();
         }
 
-        // Atualize apenas os elementos necessários em vez de renderizar tudo novamente
         const combinationName = this.querySelector('.combinations-header h3');
         const chipsValue = this.querySelector('.chips-value h3');
         const multiplierValue = this.querySelector('.multiplier-value h3');
@@ -133,16 +136,20 @@ export default class Sidebar extends HTMLElement {
 
 
         if (this.rodadaAtual.pontuacaoTotal >= this.#metaAtual) { // ganhou a rodada
-          console.log('vc ganhou!!');
           sendEvent(this, 'pontos-obtidos', {
             pontosFeitos: this.rodadaAtual.pontuacaoTotal,
             metaUltrapassada: this.#metaAtual,
             proximaMeta: this.metaAtual + 100
           })
         } else if (this.rodadaAtual.maosRestantes <= 0) {
-          console.log('vc perdeu!!');
           sendEvent(this, 'game-over', {})
         }
+        if (this.rodadaAtual.pontuacaoTotal > this.#maiorPontuacao) {
+          this.#maiorPontuacao = this.rodadaAtual.pontuacaoTotal;
+          localStorage.setItem('maiorPontuacao', this.#maiorPontuacao.toString());
+        }
+        
+        maiorPontuacaoElemento!.textContent = this.#maiorPontuacao.toString();
 
       }, Math.max(animationDuration, 1500)); // usa o tempo de animacao ou o tempo minimo de 1500
     });
@@ -249,6 +256,7 @@ export default class Sidebar extends HTMLElement {
           <h2>${this.rodadaAtual.descartesRestantes}</h2>
         </div>
       </div>
+      <h2 id="maiorPontuacaoDesc">Maior pontuação:<span id='maiorPontuacao'>${this.#maiorPontuacao}</span></h2>
     </div>
   `);
   }

@@ -1,6 +1,12 @@
 import './Result.css';
 import sendEvent from '../../lib/sendEvent.ts'
 
+declare global {
+    interface Window {
+        confetti: any;
+    }
+}
+
 export default class Result extends HTMLElement {
 
     #resultTitle: string = '';
@@ -8,10 +14,49 @@ export default class Result extends HTMLElement {
     #botaoAtual: string = '';
     #botaoAtualText: string = '';
 
+    
+
 
     connectedCallback() {
+        this.#loadConfetti();
         this.render();
         this.#adicionarEventListenersGlobais();
+    }
+
+    #loadConfetti() {
+        if (!window.confetti) {
+            const script = document.createElement('script');
+            script.src = "https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js";
+            document.getElementsByTagName('head')[0].appendChild(script);
+        }
+    }
+    #launchConfetti() {
+        if (window.confetti) {
+            window.confetti({
+                particleCount: 135,
+                angle: 60,
+                spread: 200,
+                origin: {
+                    x: 0
+                }
+            });
+            window.confetti({
+                particleCount: 135,
+                angle: 120,
+                spread: 55,
+                origin: {
+                    x: 1
+                }
+            });
+            window.confetti({
+                particleCount: 135,
+                angle: 120,
+                spread: 55,
+                origin: {
+                    x: 1
+                }
+            });
+        }
     }
 
     #adicionarEventListenersGlobais() {
@@ -24,6 +69,9 @@ export default class Result extends HTMLElement {
             this.#botaoAtual = 'continuarBtn';
             this.#botaoAtualText = 'Proximo nivel';
             this.render();
+             setTimeout(() => {
+                this.#launchConfetti();
+            }, 300);
         });
 
         document.addEventListener('game-over', (e: any) => {

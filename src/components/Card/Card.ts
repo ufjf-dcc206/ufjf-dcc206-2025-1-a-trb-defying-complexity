@@ -21,7 +21,6 @@ export default class Card extends HTMLElement {
     set card(value: string) {
         this.#card = cardsObj.find(card => card.id === value) || { id: '', selecionada: false };
         this.#card.selecionada = this.hasAttribute('selecionada') || false;
-        // this.render();
     }
 
 
@@ -38,7 +37,7 @@ export default class Card extends HTMLElement {
     }
 
 
-    attributeChangedCallback(name: string, oldValue: string, newValue: string) {
+    attributeChangedCallback(name: string, newValue: string) {
         if (name === 'carta') {
             this.card = newValue;
         }
