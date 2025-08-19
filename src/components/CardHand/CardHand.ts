@@ -180,7 +180,6 @@ export default class CardHand extends HTMLElement {
                 this.render();
             } else if (descartesRestantes === 0) {
                 sendEvent(document, "descarte-negado", {});
-
             }
         });
 

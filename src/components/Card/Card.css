@@ -8,10 +8,10 @@
     transition: all 0.3s ease;
     background: transparent;
     border: none;
-      margin-top: 8px;
+    margin-top: 8px;
 }
 
-.card-hand .card{
+.card-hand .card {
     cursor: pointer;
 }
 
