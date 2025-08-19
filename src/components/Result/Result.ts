@@ -65,7 +65,10 @@ export default class Result extends HTMLElement {
             const pontosFeitos = e.detail.pontosFeitos;
             const proximaMeta = e.detail.proximaMeta;
             this.#resultTitle = 'Muito bem!';
-            this.#resultMessage = `Nivel concluido! Voce fez ${pontosFeitos} de ${metaUltrapassada} pontos necessarios.\nNova meta: ${proximaMeta} pontos. Pronto para continuar?`;
+            this.#resultMessage = `
+            <p class="resultMessage">Nivel concluido! Voce fez ${pontosFeitos} de ${metaUltrapassada} pontos necessarios. </p>
+             <p class="resultMessage">Nova meta: <b style="color='yellow'">${proximaMeta}</b> pontos. </p>
+            `;
             this.#botaoAtual = 'continuarBtn';
             this.#botaoAtualText = 'Proximo nivel';
             this.render();
@@ -108,7 +111,7 @@ export default class Result extends HTMLElement {
         this.innerHTML = `
             <div class="result-container">
                 <h1 class="pulse-animation">${this.#resultTitle}</h1>
-                <p>${this.#resultMessage}</p>
+                ${this.#resultMessage}
                  ${this.#botaoAtual ? `<button id="${this.#botaoAtual}">${this.#botaoAtualText}</button>` : ''}
             </div>
         `;
