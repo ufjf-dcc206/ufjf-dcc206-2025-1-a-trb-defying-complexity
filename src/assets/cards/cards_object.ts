@@ -1,4 +1,4 @@
-const img_path = '/assets/images/cards/';
+const img_path = './assets/images/cards/';
 
 const naipes = [
     { nome: 'copas', cor: 'vermelho' },

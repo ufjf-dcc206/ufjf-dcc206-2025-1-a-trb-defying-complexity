@@ -214,7 +214,7 @@ export default class Sidebar extends HTMLElement {
       </div>
       <div class="score-goal">
        <div>
-        <img src="/assets/images/misc/one-real.png" alt="Descrição da imagem" class="one-real">
+        <img src="./assets/images/misc/one-real.png" alt="Descrição da imagem" class="one-real">
        </div>
        <div class="score-goal-info">
          <p>Pontue pelo menos</p>

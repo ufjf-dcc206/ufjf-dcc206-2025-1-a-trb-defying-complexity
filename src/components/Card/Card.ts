@@ -61,7 +61,7 @@ export default class Card extends HTMLElement {
     }
 
     render() {
-        const imgSrc = this.#card.img || '/assets/images/cards/0-costas.png';
+        const imgSrc = this.#card.img || './assets/images/cards/0-costas.png';
         this.innerHTML = `
             <div class="card-container ${this.#card.selecionada ? 'selected-card' : ''}" >
                 <img class='card' src="${imgSrc}" alt="Carta ${this.#card.id}">

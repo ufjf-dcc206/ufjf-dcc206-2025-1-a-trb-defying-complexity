@@ -35,7 +35,7 @@ export default class Deck extends HTMLElement {
     render() {
         this.innerHTML = (`
         <div class="deck-container">
-            <img class="deck-img" src="/assets/images/cards/0-costas.png">
+            <img class="deck-img" src="./assets/images/cards/0-costas.png">
             <h4>${this.#cartasRestantes}/52</h4>
         </div>
     `)
