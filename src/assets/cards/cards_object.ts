@@ -1,4 +1,4 @@
-const img_path = 'src/assets/images/cards/';
+const img_path = '/assets/images/cards/';
 
 const naipes = [
     { nome: 'copas', cor: 'vermelho' },
@@ -33,7 +33,7 @@ export const cardsObj: Array<{
     selecionada: boolean;
 }> = [];
 
-// adiciona os coringas
+// Adiciona os coringas
 // cardsObj.push({
 //     naipe: 'coringa',
 //     valor: 'coringa-vermelho',

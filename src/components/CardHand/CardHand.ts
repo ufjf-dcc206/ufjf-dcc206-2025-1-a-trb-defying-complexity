@@ -12,7 +12,7 @@ export default class CardHand extends HTMLElement {
 
     constructor() {
         super();
-        const todasCartas = Object.values(cardsObj).map(carta => ({
+        const todasCartas = cardsObj.map(carta => ({
             ...carta,
             selecionada: false
         }));
